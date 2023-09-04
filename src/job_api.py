@@ -21,11 +21,13 @@ class APIhhru(Header):
     """
     Класс для работы с hh.ru
     :keyword: ключевое слово для поиска вакансий
+    :city_id: id указанного города
     """
 
-    def __init__(self, keyword):
+    def __init__(self, keyword, city_id):
         self.keyword = keyword
         self.all_vacancies = []
+        self.city_id = city_id
 
     def get_requests(self):
         """
@@ -63,12 +65,14 @@ class SuperJobAPI(Header):
     Класс для работы с superjob.ru
     :keyword: ключевое слово для поиска вакансий
     :api_key: API ключ для работы с superjob.ru
+    :city_id: id указанного города
     """
 
-    def __init__(self, keyword, api_key):
+    def __init__(self, keyword, api_key, city_id):
         self.keyword = keyword
         self.api_key = api_key
         self.all_vacancies = []
+        self.city_id = city_id
 
     def get_requests(self):
         """
@@ -79,13 +83,14 @@ class SuperJobAPI(Header):
             "page": 0,
             "count": 100,
             "keyword": self.keyword,
-            "archive": False
+            "archive": False,
+            "t": self.city_id
         }
         headers = {
-            "X-Api-App-Id": self.api_key
+            "X-Api-App-Id": "v3.r.137791981.ea2ec6cf19858308dd070dd55cb5d5ec6c41ef45.954324da525f017c541f62d6d84835e400cb48e0"
         }
         data = requests.get("https://api.superjob.ru/2.0/vacancies/", params=params, headers=headers).json()
-        return data['objects']
+        return data
 
     def get_vacancy(self):
         """
