@@ -15,11 +15,7 @@
 ```bash 
 https://github.com/suvorovjr/course_work_4
 ```
-2. Установите зависимости с помощью команды
-```bash 
-pip install -r requirements.txt
-```
-3. Активируйте виртуальное окружение с помощью команд:
+2. Активируйте виртуальное окружение с помощью команд:
 - Для операционной системы Windows
 ```bash 
 venv/Scripts/activate.bat
@@ -28,3 +24,8 @@ venv/Scripts/activate.bat
 ```bash 
 source venv/bin/activate
 ```
+3. Установите зависимости с помощью команды
+```bash 
+pip install -r requirements.txt
+```
+
