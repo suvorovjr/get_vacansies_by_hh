@@ -26,8 +26,8 @@ class APIhhru(Header):
 
     def __init__(self, keyword, city_id):
         self.keyword = keyword
-        self.all_vacancies = []
         self.city_id = city_id
+        self.all_vacansies = []
 
     def get_requests(self):
         """
@@ -38,10 +38,11 @@ class APIhhru(Header):
             "page": 0,
             "per_page": 100,
             "text": self.keyword,
-            "only_with_salary": True
+            "only_with_salary": True,
+            "area": self.city_id
         }
-        data = requests.get("https://api.hh.ru/vacancies", params=params).json()
-        return data["items"]
+        data_hh = requests.get("https://api.hh.ru/vacancies", params=params).json()
+        return data_hh["items"]
 
     def get_vacancy(self):
         """
@@ -49,7 +50,8 @@ class APIhhru(Header):
         :return: список словарей с обработанными вакансиями
         """
         data = self.get_requests()
-        vacancies = [{
+        self.all_vacansies = [{
+            "id": vacancy.get("id"),
             "title": vacancy.get("name"),
             "url": vacancy.get("alternate_url"),
             "salary_from": vacancy.get("salary", {}).get("from"),
@@ -57,7 +59,7 @@ class APIhhru(Header):
             "currency": vacancy.get("salary", {}).get("currency"),
             "area": vacancy.get("area", {}).get("name")
         } for vacancy in data]
-        return vacancies
+        return self.all_vacansies
 
 
 class SuperJobAPI(Header):
@@ -70,9 +72,9 @@ class SuperJobAPI(Header):
 
     def __init__(self, keyword, api_key, city_id):
         self.keyword = keyword
+        self.city_id = city_id
         self.api_key = api_key
         self.all_vacancies = []
-        self.city_id = city_id
 
     def get_requests(self):
         """
@@ -87,23 +89,24 @@ class SuperJobAPI(Header):
             "t": self.city_id
         }
         headers = {
-            "X-Api-App-Id": "v3.r.137791981.ea2ec6cf19858308dd070dd55cb5d5ec6c41ef45.954324da525f017c541f62d6d84835e400cb48e0"
+            "X-Api-App-Id": self.api_key
         }
-        data = requests.get("https://api.superjob.ru/2.0/vacancies/", params=params, headers=headers).json()
-        return data
+        data_sj = requests.get("https://api.superjob.ru/2.0/vacancies/", params=params, headers=headers).json()
+        return data_sj["objects"]
 
     def get_vacancy(self):
         """
         перебирает вакансии из метода get_requests и приводит их к нужному формату
         :return: список словарей с обработанными вакансиями
         """
-        data = self.get_requests()
+        data_sj = self.get_requests()
         self.all_vacancies = [{
+            "id": vacancy.get("id"),
             "title": vacancy.get("profession"),
             "url": vacancy.get("link"),
             "salary_from": vacancy.get("payment_from"),
             "salary_to": vacancy.get("payment_to"),
             "currency": vacancy.get("currency"),
             "area": vacancy.get("town", {}).get("title")
-        } for vacancy in data]
+        } for vacancy in data_sj]
         return self.all_vacancies
