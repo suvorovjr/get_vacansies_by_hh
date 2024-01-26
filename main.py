@@ -1,5 +1,5 @@
 from src.storage_json import VacansyJson
-from src.userinteface import UserIntarface
+from src.userinteface import UserInterface
 from src.city_id import receive_city_hh, receive_city_super_job
 from src.settings_paths import AREAS_HH, AREAS_SUPERJOB, API_KEY_SUPERJOB, VACANSIES_JSON
 from src.job_api import APIhhru, SuperJobAPI
@@ -9,8 +9,8 @@ def main():
     save_json = VacansyJson(VACANSIES_JSON)
     save_json.remove_vacansies()
 
-    user_platform = UserIntarface.platform_choice()
-    user_keyword, user_cities = UserIntarface.cyties_choice()
+    user_platform = UserInterface.platform_choice()
+    user_keyword, user_cities = UserInterface.cyties_choice()
 
     if user_platform == "1":
         hh_city_id = receive_city_hh(AREAS_HH, user_cities)
