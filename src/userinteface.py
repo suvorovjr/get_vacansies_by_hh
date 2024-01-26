@@ -1,4 +1,4 @@
-class UserIntarface:
+class UserInterface:
     @staticmethod
     def platform_choice():
         while True:
